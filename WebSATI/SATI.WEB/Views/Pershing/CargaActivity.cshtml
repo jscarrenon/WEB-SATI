@@ -1,0 +1,48 @@
+﻿<div class="container-fluid" style="margin-top:20px;">
+    @{ Html.RenderAction("Menu", "Pershing"); }
+    <div id="contenido" class="col-md-12" style="background: #fff;margin-top: 20px; ">
+        <h4 class="titulos-view">Carga Activity</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-2">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
+                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-pershing" aria-expanded="true" style="font-size: 12px;">Pershing</a>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-pershing">
+                        <div id="Procesador-excel">
+                            @using (Html.BeginForm("ModalActivity", "Archivo", FormMethod.Post, new { id = "formulario", name = "formulario", enctype = "multipart/form-data" }))
+                            {
+                                <label class="custom-file form-control" style="margin-top:  30px;text-align:  center;display:  block;">
+                                    <input class="inputfile" type="file" id="file" name="files" />
+                                    <label for="file"><span id="respuesta" style="border-bottom: 1px solid #b7b7b7;padding:  20px;border-radius: 1px;background-color: #fff;color: #9e9c9c;padding-bottom: 10px;">Preciona aca para seleccionar archivo</span></label>
+                                </label>
+
+                                <button id="btnProcesar" type="submit" class="btn btn-outline-primary" style="float:right;margin-top:20px;">Procesar</button>
+
+                                @Html.Partial("Loading", new ViewDataDictionary { { "extraClass", "col-md-12" }, { "id", "loading-process" } })
+                            }
+                        </div>
+
+                        <div id="View-result-pershing" style="display:none;">
+
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-otros">Temporalmente inactivo</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-container">
+
+        </div>
+    </div>
+    @Html.Partial("Loading", new ViewDataDictionary { { "extraClass", "col-md-12 view-loading" }, { "id", "loading" } })
+</div>
+
+
+
+
+

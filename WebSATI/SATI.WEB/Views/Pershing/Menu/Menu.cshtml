@@ -1,0 +1,14 @@
+﻿<ul class="nav nav-tabs">
+    @foreach (SATI.Common.Entities.Menu item in ViewData["ListMenuAplicacion"] as List<SATI.Common.Entities.Menu>)
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">@item.Nombre</a>
+            <div class="dropdown-menu">
+                @foreach (SATI.Common.Entities.ItemsMenu itemsMenu in item.items as List<SATI.Common.Entities.ItemsMenu>)
+                {
+                    <a class="dropdown-item" href="@Url.Action(@itemsMenu.Enlace,"Pershing")">@itemsMenu.Nombre</a>
+                }
+            </div>
+        </li>
+    }
+</ul>

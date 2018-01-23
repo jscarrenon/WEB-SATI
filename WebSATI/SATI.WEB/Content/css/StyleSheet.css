@@ -1,0 +1,48 @@
+﻿.titulos-view
+{
+    margin: 20px;
+    padding-top: 20px;
+    color: #777676;
+}
+
+.tbl-pershing
+{
+    overflow-y:hidden;
+    overflow-x:scroll;
+}
+
+.btn-carga-pershing
+{
+    width: 100%;
+    height: 60%;
+    position: relative;
+    right: 12px;
+}
+
+/*input file*/
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.view-loading
+{
+    display:none; 
+    background: #fff;
+    margin-top: 20px;
+}
+
+#loading-process img
+{
+    display: block;
+    margin: 0 auto;
+    width: 68px;
+    float:right;
+}
+
+

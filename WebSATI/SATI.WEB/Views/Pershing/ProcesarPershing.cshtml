@@ -1,0 +1,246 @@
+﻿@model SATI.Common.Entities.ActivityPershing
+<div class="row">
+    <div class="col-md-2">
+        <div class="form-group">
+            <label class="form-control-label" for="formGroupExampleInput">Fecha de Carga</label>
+            <input type="text" class="form-control" id="formGroupExampleInput" value="@Model.FechaCarga" style="background-color:#fff;" placeholder="Fecha de Carga" disabled>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <label class="form-control-label" for="formGroupExampleInput">Valor Dolar</label>
+        <input type="text" class="form-control" id="formGroupExampleInput" value="@Model.valorDolar" style="background-color:#fff;" placeholder="Valor Dolar" disabled>
+    </div>
+    <div class="col-md-2">
+        <label class="form-control-label" for="formGroupExampleInput">Total Com. (CLP$)</label>
+        <input type="text" class="form-control" id="formGroupExampleInput" value="@Model.TotalComCLP" style="background-color:#fff;" placeholder="Valor Dolar" disabled>
+    </div>
+    <div class="col-md-2">
+        <label class="form-control-label" for="formGroupExampleInput">Total Com. (US$)</label>
+        <input type="text" class="form-control" id="formGroupExampleInput" value="@Model.TotalComUS" style="background-color:#fff;" placeholder="Valor Dolar" disabled>
+    </div>
+    <div class="col-md-2">
+        <label class="form-control-label" for="formGroupExampleInput">Total Registro</label>
+        <input type="text" class="form-control" id="formGroupExampleInput" value="@Model.TotalRegistros" style="background-color:#fff;" placeholder="Valor Dolar" disabled>
+    </div>
+    <div class="col-md-2">
+    @if (Model.Instrumento.Equals("Fondos Mutuos"))
+    {
+            <label class="form-control-label" for="formGroupExampleInput">Reg. Pendientes</label>
+    }
+    else
+    {
+            <label class="form-control-label" for="formGroupExampleInput">Reg. Omitidos</label>
+    }
+        <input type="text" class="form-control" id="OmitidosPershing" value="@Model.RegistroAnulados" style="background-color:#fff;" placeholder="Valor Dolar" readonly>
+    </div>
+</div>
+<div class="row" style="margin-top:  50px;">
+    <div class="col-md-9">
+        <label>Instrumentos</label>
+        @using (Html.BeginForm("ChangeInstrumentoPershing", "Pershing", FormMethod.Post, new { @id="instrumentoCheck" }))
+        {
+            <div class="form-group">
+            <label class="custom-control custom-radio">
+                @if (Model.Instrumento.Equals("Renta Variable"))
+                {
+                    <input id="radio1" name="instrumento" value="Renta Variable" type="radio" class="custom-control-input instrumento" checked>
+                }
+                else
+                {
+                    <input id="radio1" name="instrumento" value="Renta Variable" type="radio" class="custom-control-input instrumento">
+                }
+                <span class="custom-control-indicator" style="background-color: #969696;"></span>
+                <span class="custom-control-description">Renta Variable</span>
+            </label>
+            <label class="custom-control custom-radio">
+                @if (Model.Instrumento.Equals("Renta Fija"))
+                {
+                     <input id="radio1" name="instrumento" value="Renta Fija" type="radio" class="custom-control-input instrumento" checked>
+                }
+                else
+                {
+                     <input id="radio1" name="instrumento" value="Renta Fija" type="radio" class="custom-control-input instrumento">
+                }
+                <span class="custom-control-indicator" style="background-color: #969696;"></span>
+                <span class="custom-control-description">Renta Fija</span>
+            </label>
+            <label class="custom-control custom-radio">
+                @if (Model.Instrumento.Equals("Fondos Mutuos"))
+                {
+                    <input id="radio1" name="instrumento" value="Fondos Mutuos" type="radio" class="custom-control-input instrumento" checked>
+                }
+                else
+                {
+                    <input id="radio1"  name="instrumento" value="Fondos Mutuos" type="radio" class="custom-control-input instrumento">
+                }
+                <span class="custom-control-indicator" style="background-color: #969696;"></span>
+                <span class="custom-control-description">Fondos Mutuos</span>
+            </label>
+        </div>        
+        }
+    </div> 
+</div>
+@using (Html.BeginForm("ConfirmarCargaPershing", "Pershing", FormMethod.Post, new { @id = "frmCargaPershing" }))
+{
+
+<div class="row">
+    <div class="col-md-9" style="padding-top: 36px;">
+        <label class="custom-control custom-checkbox" style="margin-left:13px;">
+            <input type="checkbox" class="custom-control-input check-full-p" value="Todos" />
+            <span class="custom-control-indicator" style="background-color: #969696;"></span>
+            <span class="custom-control-description">Seleccionar Todos</span>
+        </label>
+    </div>
+    <div class="col-md-3">
+        @if (Model.listadoExcelPershing.Count > 0)
+        {
+            <input id="btnCargaPershing" type="submit" class="btn btn-raised btn-primary centrar-div btn-carga-pershing" style="height: 52px;position: absolute;top: -30px;" value="Cargar" />
+        }
+    </div>
+    <input id="numFolio" type="hidden" value="@Model.NumeroFolio" name="numFolio" />
+    <input id="instrumento" type="hidden" value="@Model.Instrumento" name="instrumento" />
+</div>
+    <div class="tbl-pershing">
+        @Html.Partial("Loading", new ViewDataDictionary { { "extraClass", "col-md-12" }, { "id", "loading-process" } })
+        <table id="example" class="table table-striped table-bordered" cellspacing="0" style="max-width: 300%;position: static;width: 300%;">
+            <thead>
+                <tr>
+                    <th>Procesar</th>
+                    <th>Fecha Proceso</th>
+                    <th>Tipo Instrumento</th>
+                    <th>N°Cuenta</th>
+                    <th>Tipo Operación</th>
+                    <th>Cantidad</th>
+                    <th>Simbolo</th>
+                    <th>Precio</th>
+                    <th>Interés</th>
+                    <th>Monto Neto Base</th>
+                    <th>Comisión</th>
+                    <th>Impuesto</th>
+                    <th>Moneda</th>
+                    <th>Corredora</th>
+                    <th>Monto Neto</th>
+                    <th>Fecha Limite</th>
+                    <th>C. Agente</th>
+                    <th>Nombre Agente</th>
+                    <th>Rut Cliente</th>
+                    <th>Dv Cliente</th>
+                    <th>Nombre Cliente</th>
+                    <th>Monto Bruto</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (SATI.Common.Entities.Excel.ExcelPershing excel in Model.listadoExcelPershing as List<SATI.Common.Entities.Excel.ExcelPershing>)
+                {
+                    <tr>
+                        <td>
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" name="pershingCod[]" class="custom-control-input check-full" value="@excel.Id" />
+                                <span class="custom-control-indicator" style="background-color: #969696;"></span>
+                                <span class="custom-control-description"></span>
+                            </label>
+                        </td>
+                        <td>@excel.fecha_proceso</td>
+                        <td>@excel.tipo_cuenta</td>
+                        <td>@excel.num_cuenta</td>
+                        <td>@excel.tipo_ope</td>
+                        <td>@excel.cantidad</td>
+                        <td>@excel.simbolo</td>
+                        <td>@excel.precio</td>
+                        <td>@excel.interes</td>
+                        <td>@excel.monto_neto_base</td>
+                        <td>@excel.comision</td>
+                        <td>@excel.impuestos</td>
+                        <td>USD</td>
+                        <td>Pershing</td>
+                        <td>@excel.monto_neto</td>
+                        <td>@excel.fecha_strlmnt</td>
+                        <td>@excel.Cliente.CodigoAgente</td>
+                        <td>@excel.Cliente.NombreAgente</td>
+                        <td>@excel.Cliente.rut</td>
+                        <td>@excel.Cliente.Dv</td>
+                        <td>@excel.Cliente.Nombre</td>
+                        <td>@excel.bruto</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div id="pruebaModal" class="modal fade bd-example-modal-lg">
+    <div class="modal-dialog modal-lg" role="document" style="max-width: 1142px;">
+        <div class="modal-content">
+            <div class="modal-header" style="color: #8a8a8a;border-bottom: 1px solid #f5f5f5; padding: 15px;">
+                <h5 class="modal-title" style="font-size: 15px;">Listado @Model.Instrumento Pendientes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="overflow:auto;">
+                <table id="example" class="table table-striped table-bordered" cellspacing="0" style="max-width: 300%;position: static;width: 300%;">
+                    <thead>
+                        <tr>                         
+                            <th>Fecha Proceso</th>
+                            <th>Tipo Instrumento</th>
+                            <th>N°Cuenta</th>
+                            <th>Tipo Operación</th>
+                            <th>Cantidad</th>
+                            <th>Simbolo</th>
+                            <th>Precio</th>
+                            <th>Interés</th>
+                            <th>Monto Neto Base</th>
+                            <th>Comisión</th>
+                            <th>Impuesto</th>
+                            <th>Moneda</th>
+                            <th>Corredora</th>
+                            <th>Monto Neto</th>
+                            <th>Fecha Limite</th>
+                            <th>C. Agente</th>
+                            <th>Nombre Agente</th>
+                            <th>Rut Cliente</th>
+                            <th>Dv Cliente</th>
+                            <th>Nombre Cliente</th>
+                            <th>Monto Bruto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (SATI.Common.Entities.Excel.ExcelPershing excel in Model.listadoExcelOmitidos as List<SATI.Common.Entities.Excel.ExcelPershing>)
+                        {
+                            <tr>                              
+                                <td>@excel.fecha_proceso</td>
+                                <td>@excel.tipo_cuenta</td>
+                                <td>@excel.num_cuenta</td>
+                                <td>@excel.tipo_ope</td>
+                                <td>@excel.cantidad</td>
+                                <td>@excel.simbolo</td>
+                                <td>@excel.precio</td>
+                                <td>@excel.interes</td>
+                                <td>@excel.monto_neto_base</td>
+                                <td>@excel.comision</td>
+                                <td>@excel.impuestos</td>
+                                <td>USD</td>
+                                <td>Pershing</td>
+                                <td>@excel.monto_neto</td>
+                                <td>@excel.fecha_strlmnt</td>
+                                <td>@excel.Cliente.CodigoAgente</td>
+                                <td>@excel.Cliente.NombreAgente</td>
+                                <td>@excel.Cliente.rut</td>
+                                <td>@excel.Cliente.Dv</td>
+                                <td>@excel.Cliente.Nombre</td>
+                                <td>@excel.bruto</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/Scripts/Pershing/ProcesarPershing.js")"></script>
+
+

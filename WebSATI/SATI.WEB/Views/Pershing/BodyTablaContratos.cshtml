@@ -1,0 +1,58 @@
+﻿@foreach (SATI.Common.Entities.Pershing.Contrato contrato in ViewData["Contratos"] as List<SATI.Common.Entities.Pershing.Contrato>)
+{
+    <tr>      
+        <td>@contrato.FechaProceso</td>
+        <td>@contrato.Folio</td>
+        <td>@contrato.Simbol</td>
+        <td>@contrato.Currency</td>
+        <td>@contrato.TipoInstrumento</td>
+        <td>@contrato.Isin</td>
+        <td>@contrato.Nominales</td>
+        <td>@contrato.Precio</td>
+        <td>@contrato.TipoOperacion</td>
+        <td>@contrato.Comision</td>
+        <td>@contrato.NumeroCuenta</td>
+        <td>@contrato.RutCliente</td>
+        <td>@contrato.NombreCliente</td>
+    </tr>
+}
+
+<script>
+
+    $(".check-full-c").change(function () {
+        if ($(this).is(':checked')) {
+            $(".check-full-con").prop('checked', 'checked');
+        } else {
+            $(".check-full-con").prop('checked', false);
+        }
+    });
+
+    $(".check-full-con").change(function () {
+        var contadorRadioCheck = 0;
+        var contadorRadio = 0
+        $(".check-full-con").each(function () {
+            if ($(this).is(":checked"))
+                contadorRadioCheck++;
+        });
+        $(".check-full-con").each(function () {
+            contadorRadio++;
+        });
+
+        if (contadorRadioCheck == contadorRadio) {
+            if (contadorRadioCheck > 0) {
+                $(".check-full-c").prop('indeterminate', false)
+                $(".check-full-c").prop('checked', true);
+            }
+        } else {
+            if (contadorRadioCheck > 0) {
+                $(".check-full-c").prop('indeterminate', true)
+            } else {
+                $(".check-full-c").prop('indeterminate', false)
+                $(".check-full-c").prop('checked', false);
+            }
+        }
+    });
+
+</script>
+
+

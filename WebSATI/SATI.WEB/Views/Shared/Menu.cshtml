@@ -1,0 +1,34 @@
+﻿<nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #044b90 !important;">
+
+    </nav>
+</nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #0d66bc !important;">
+    <a class="navbar-brand" href="#">
+        <img src="~/Content/images/Tannerlogo.png" />
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="material-icons text-white">menu</i>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            
+            @foreach (SATI.Common.Entities.Modulos item in ViewData["ListModulos"] as List<SATI.Common.Entities.Modulos>)
+            {
+                @Html.ActionLink(@item.Titulo, @item.Action, @item.Controller, null, new { @name= @item.Titulo,@class = "btn btn-primary link-menu ",@role="button", @style = "color:#fff;margin-right:10px;font-size: 13px;"})
+            }
+
+            <div class="dropdown d-none d-xl-block">
+                <a class="btn btn-secondary dropdown-toggle" role="button" style="color:#fff;margin-right:10px;font-size: 13px;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Utilidades
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="left: -161px; width: 279px;">
+                    <a class="dropdown-item" style="font-size:14px;" href="http://apolo/grp" target="_blank">Calce Fordware</a>
+                    <a class="dropdown-item" style="font-size:14px;" href="https://www.tannercliente.cl/php/firmas/verificador/index.php" target="_blank">Contratos Inconsistentes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+

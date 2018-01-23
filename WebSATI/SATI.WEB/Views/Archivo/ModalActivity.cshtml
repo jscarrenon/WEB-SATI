@@ -1,0 +1,81 @@
+﻿@model SATI.Common.Entities.ActivityPershing
+
+
+@if (!Model.Error.Mensaje.IsEmpty())
+{
+    <div id="pruebaModal" class="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="color: #8a8a8a;border-bottom: 1px solid #f5f5f5; padding: 15px;">
+                    <h5 class="modal-title" style="font-size: 15px;">Carga Archivo Pershing - Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="text-align: justify;font-size: 15px;">@Model.Error.Mensaje</p>
+                    <strong style="font-size: 15px;">Descripcion : </strong> <h style="text-align: justify;font-size: 14px;">@Model.Error.descripcion</h>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>           
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div id="pruebaModal" class="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+@using (Html.BeginForm("ProcesarPershing", "Pershing", FormMethod.Post, new { id = "frm-procesar", name = "formulario" }))
+{
+                <div class="modal-header" style="color: #8a8a8a;border-bottom: 1px solid #f5f5f5; padding: 15px;">
+                    <h5 class="modal-title" style="font-size:15px;">Carga Archivo Pershing</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p style="color: #131313;font-size: 14px; text-align: justify;">
+                                Este es un resumen del contenido a procesar. Si desea continuar con este proceso, por favor, precione el botón continuar.
+                                En caso contrario presione el botón cancelar.
+                            </p>
+                        </div>
+                        <div class="col-md-12">
+                           <label for="Fecha Remplazar" style="font-size: 14px;">Fecha proceso : </label>
+                            <label style="font-size: 13px;">@Model.FechaCarga</label>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="Fecha Remplazar" style="font-size: 14px;">Total registros : </label>
+                            <label style="font-size: 13px;">@Model.TotalRegistros</label>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="Fecha Remplazar" style="font-size: 14px;">Registros anulados : </label>
+                            <label style="font-size: 13px;">@Model.RegistroAnulados</label>
+                        </div>
+                        @if (Model.Duplicado)
+                        {
+                            <div class="col-md-12">
+                                <p style="color: #585757;font-size: 13px;text-align: justify;margin-top: 12px;padding: 12px;border-radius: 8px;background-color: #f3f3f3;font-weight: 500;">
+                                    <strong style="color:red;">Adventencia : </strong> La fecha @Model.FechaCarga, ya existe en la base de datos,
+                                    continuar con la carga anulará los registros que coincidan con esta fecha.
+                                </p>
+                            </div>
+                        }                                       
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #f3f3f3;">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>                   
+                    <button type="submit" class="btn btn-primary">Continuar</button>                 
+                </div>
+}
+            </div>
+        </div>
+    </div>
+}
+
+<script src="@Url.Content("~/Scripts/Pershing/Modal.js")"></script>
+
